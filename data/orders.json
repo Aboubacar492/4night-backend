@@ -1,0 +1,91 @@
+[
+  {
+    "id": "CMD-1771066612803",
+    "orderNumber": 1,
+    "customer": {
+      "nom": "KABORE",
+      "prenom": "Aboubacar",
+      "telephone": "+212630808680",
+      "email": "aboubacarsidikikabor70@gmail.com",
+      "adresse": "egvbfsdhbs",
+      "quartier": "ouaga 2000",
+      "ville": "Ouagadougou"
+    },
+    "cart": [
+      {
+        "id": 6,
+        "brand": "AJMAL",
+        "name": "Incense Wood | أجمل",
+        "selectedSize": "50ml",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      },
+      {
+        "id": 7,
+        "brand": "AJMAL",
+        "name": "Qafiya 2 | قافية 2",
+        "selectedSize": "50ml",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      }
+    ],
+    "total": 10000,
+    "currency": "fcfa",
+    "paymentMethod": "Paiement à la livraison",
+    "paymentStatus": "En attente",
+    "orderStatus": "Nouvelle",
+    "createdAt": "2026-02-14T10:56:52.803Z",
+    "updatedAt": "2026-02-14T10:56:52.803Z"
+  },
+  {
+    "id": "CMD-1771097407528",
+    "orderNumber": 2,
+    "customer": {
+      "nom": "KABORE",
+      "prenom": "Aboubacar",
+      "telephone": "+212630808680",
+      "email": "aboubacarsidikikabor70@gmail.com",
+      "adresse": "egvbfsdhbs",
+      "quartier": "ouaga 2000",
+      "ville": "Ouagadougou"
+    },
+    "cart": [
+      {
+        "id": 1,
+        "brand": "ACQUA DI PARMA",
+        "name": "Acqua Di Parma",
+        "selectedSize": "50ml",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      },
+      {
+        "id": 2,
+        "brand": "ACQUA DI PARMA",
+        "name": "Oud & Spice",
+        "selectedSize": "50ml",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      },
+      {
+        "id": 3,
+        "brand": "ADIDAS",
+        "name": "Team Force",
+        "selectedSize": "50ml",
+        "quantity": 1,
+        "price": 5000,
+        "total": 5000
+      }
+    ],
+    "total": 15000,
+    "currency": "fcfa",
+    "paymentMethod": "Paiement à la livraison",
+    "paymentStatus": "En attente",
+    "orderStatus": "Nouvelle",
+    "createdAt": "2026-02-14T19:30:07.528Z",
+    "updatedAt": "2026-02-14T19:30:07.528Z"
+  }
+]
