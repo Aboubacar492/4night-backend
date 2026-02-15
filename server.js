@@ -13,7 +13,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// ✅ IMPORTANT : Servir les fichiers statiques (HTML, CSS, JS)
+// Servir les fichiers statiques
 app.use(express.static(__dirname));
 
 // Créer le dossier data s'il n'existe pas
