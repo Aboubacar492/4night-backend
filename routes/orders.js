@@ -3,6 +3,9 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
+// ✅ AJOUTER CES LIGNES
+const { sendClientEmail, sendVendorEmail } = require('../services/emailService');
+
 const ordersFile = path.join(__dirname, '../data/orders.json');
 
 // Fonction pour lire les commandes
@@ -17,15 +20,44 @@ const readOrders = () => {
 };
 
 // Fonction pour sauvegarder les commandes
-const saveOrders = (orders) => {
+if (saveOrders(orders)) {
+  console.log(`✅ Nouvelle commande: ${newOrder.id}...`);
+  
+  // ✅ AJOUTER CE BLOC
   try {
-    fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Erreur écriture orders.json:', error);
-    return false;
+    // Email au client (si email fourni)
+    if (customer.email && customer.email !== 'Non fourni') {
+      await sendClientEmail(
+        customer.email,
+        `${customer.prenom} ${customer.nom}`,
+        newOrder.orderNumber,
+        newOrder.cart,
+        total,
+        currency
+      );
+    }
+
+    // Email au vendeur (VOUS)
+    await sendVendorEmail(
+      newOrder.orderNumber,
+      customer,
+      newOrder.cart,
+      total,
+      currency
+    );
+
+    console.log('📧 Notifications envoyées');
+  } catch (notifError) {
+    console.error('⚠️ Erreur notifications:', notifError.message);
   }
-};
+  // FIN DU BLOC
+  
+  return res.status(201).json({
+    success: true,
+    message: 'Commande créée avec succès !',
+    order: newOrder
+  });
+}
 
 // 📥 POST - Créer une nouvelle commande
 router.post('/create', (req, res) => {
