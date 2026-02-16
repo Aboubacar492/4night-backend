@@ -60,7 +60,7 @@ if (saveOrders(orders)) {
 }
 
 // 📥 POST - Créer une nouvelle commande
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
   try {
     const { customer, cart, total, currency, paymentMethod } = req.body;
 
