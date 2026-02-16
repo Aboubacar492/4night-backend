@@ -3,7 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 
-// ✅ AJOUTER CES LIGNES
+// Importer les services de notification
 const { sendClientEmail, sendVendorEmail } = require('../services/emailService');
 
 const ordersFile = path.join(__dirname, '../data/orders.json');
@@ -20,44 +20,15 @@ const readOrders = () => {
 };
 
 // Fonction pour sauvegarder les commandes
-if (saveOrders(orders)) {
-  console.log(`✅ Nouvelle commande: ${newOrder.id}...`);
-  
-  // ✅ AJOUTER CE BLOC
+const saveOrders = (orders) => {
   try {
-    // Email au client (si email fourni)
-    if (customer.email && customer.email !== 'Non fourni') {
-      await sendClientEmail(
-        customer.email,
-        `${customer.prenom} ${customer.nom}`,
-        newOrder.orderNumber,
-        newOrder.cart,
-        total,
-        currency
-      );
-    }
-
-    // Email au vendeur (VOUS)
-    await sendVendorEmail(
-      newOrder.orderNumber,
-      customer,
-      newOrder.cart,
-      total,
-      currency
-    );
-
-    console.log('📧 Notifications envoyées');
-  } catch (notifError) {
-    console.error('⚠️ Erreur notifications:', notifError.message);
+    fs.writeFileSync(ordersFile, JSON.stringify(orders, null, 2));
+    return true;
+  } catch (error) {
+    console.error('Erreur écriture orders.json:', error);
+    return false;
   }
-  // FIN DU BLOC
-  
-  return res.status(201).json({
-    success: true,
-    message: 'Commande créée avec succès !',
-    order: newOrder
-  });
-}
+};
 
 // 📥 POST - Créer une nouvelle commande
 router.post('/create', async (req, res) => {
@@ -107,8 +78,8 @@ router.post('/create', async (req, res) => {
       total: total,
       currency: currency || 'fcfa',
       paymentMethod: paymentMethod || 'livraison',
-      paymentStatus: 'En attente', // En attente, Payé, Annulé
-      orderStatus: 'Nouvelle',     // Nouvelle, Confirmée, En livraison, Livrée, Annulée
+      paymentStatus: 'En attente',
+      orderStatus: 'Nouvelle',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
@@ -119,6 +90,34 @@ router.post('/create', async (req, res) => {
     // Sauvegarder
     if (saveOrders(orders)) {
       console.log(`✅ Nouvelle commande: ${newOrder.id} - ${customer.prenom} ${customer.nom} - ${total} ${currency}`);
+      
+      // 📧 ENVOYER LES NOTIFICATIONS
+      try {
+        // Email au client (si email fourni)
+        if (customer.email && customer.email !== 'Non fourni') {
+          await sendClientEmail(
+            customer.email,
+            `${customer.prenom} ${customer.nom}`,
+            newOrder.orderNumber,
+            newOrder.cart,
+            total,
+            currency
+          );
+        }
+
+        // Email au vendeur (VOUS)
+        await sendVendorEmail(
+          newOrder.orderNumber,
+          customer,
+          newOrder.cart,
+          total,
+          currency
+        );
+
+        console.log('📧 Notifications envoyées');
+      } catch (notifError) {
+        console.error('⚠️ Erreur notifications:', notifError.message);
+      }
       
       return res.status(201).json({
         success: true,
@@ -150,7 +149,7 @@ router.get('/', (req, res) => {
     return res.json({
       success: true,
       count: orders.length,
-      orders: orders.reverse() // Plus récentes en premier
+      orders: orders.reverse()
     });
   } catch (error) {
     console.error('Erreur récupération commandes:', error);
@@ -203,7 +202,6 @@ router.put('/:id/status', (req, res) => {
       });
     }
 
-    // Mettre à jour le statut
     if (orderStatus) orders[orderIndex].orderStatus = orderStatus;
     if (paymentStatus) orders[orderIndex].paymentStatus = paymentStatus;
     orders[orderIndex].updatedAt = new Date().toISOString();
