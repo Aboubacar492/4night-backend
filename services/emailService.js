@@ -1,11 +1,16 @@
 const nodemailer = require('nodemailer');
 
-// Configuration Email (Gmail gratuit)
+// Configuration Email - PORT 587 pour Render
 const EMAIL_CONFIG = {
-  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // IMPORTANT pour port 587
   auth: {
-    user: process.env.EMAIL_USER || 'votre-email@gmail.com',
-    pass: process.env.EMAIL_PASS || 'votre-mot-de-passe-app'
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false // Permet les connexions sur Render
   }
 };
 
